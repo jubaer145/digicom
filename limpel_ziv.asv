@@ -1,0 +1,52 @@
+clear all;
+clc;
+close all;
+msg= 'loser love';
+dict_sym{1}= 'l'; dict_sym{2}= 'o'; dict_sym{3}= 's';
+dict_ind{1}= '0'; dict_ind{2}= '1'; dict_ind{3}= '2';
+enc_msg= cell(1, 10);
+curr_index= 3;
+k= 1;
+temp= ' ';
+j= 1;
+while j<=length(msg)
+    temp= '';
+    found= 0;
+    for i= j:length(msg)
+        temp= strcat(temp, msg(i));
+        found= 0;
+        for ind= 1:curr_index
+            if strcmp(temp, dict_sym(ind))
+                found= 1;
+                index= ind;
+            end
+        end
+        
+        if ~found
+            curr_index= curr_index+1;
+            dict_sym{curr_index}= temp;
+            len= length(temp);
+            dict_ind{curr_index}= num2str(curr_index-1);
+            break;
+        end
+    end
+    
+    j= j+len-1;
+    enc_msg{k}= dict_ind{index};
+    k= k+1;
+end
+
+
+dict_sym
+dict_ind
+enc_msg
+binary= dec2bin(str2num(char(enc_msg))) % Converts to fixed length butvariable binary codes
+
+
+
+
+
+
+
+
+

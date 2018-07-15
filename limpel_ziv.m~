@@ -1,0 +1,105 @@
+clear all;
+clc;
+close all;
+msg= 'loserlove';
+dict_sym{1}= 'l'; dict_sym{2}= 'o'; dict_sym{3}= 's';dict_sym{4} = 'e'; dict_sym{5} = 'r'; dict_sym{6} = 'v';
+dict_ind{1}= '0'; dict_ind{2}= '1'; dict_ind{3}= '2'; dict_ind{4} = '3'; dict_ind{5} = '4'; dict_ind{6} = '5'; 
+enc_msg= cell(1, 8);
+curr_index= 6;
+k= 1;
+temp= ' ';
+j= 1;
+while j<=length(msg)
+    temp= '';
+    found= 0;
+    for i= j:length(msg)
+        temp= strcat(temp, msg(i));
+        found= 0;
+        for ind= 1:curr_index
+            if strcmp(temp, dict_sym(ind))
+                found= 1;
+                index= ind;
+            end
+        end
+        
+        if ~found
+            curr_index= curr_index+1;
+            dict_sym{curr_index}= temp;
+            len= length(temp);
+            dict_ind{curr_index}= num2str(curr_index-1);
+            break;
+        end
+    end
+    
+    j= j+len-1;
+    enc_msg{k}= dict_ind{index};
+    k= k+1;
+end
+
+
+dict_sym
+dict_ind
+enc_msg
+binary= dec2bin(str2num(char(enc_msg))) % Converts to fixed length butvariable binary codes
+
+
+
+
+
+
+k= 1;
+bits = 4;
+for i= 1:bits:length(enc_msg)-bits+1
+    incoming_msg(k)= num2str(bin2dec(enc_msg(i:i+bits-1)));
+    k= k+1;
+end
+
+
+dict_sym{1}= 'l'; dict_sym{2}= 'o'; dict_sym{3}= 's';dict_sym{4} = 'e'; dict_sym{5} = 'r'; dict_sym{6} = 'v';
+dict_ind{1}= '0'; dict_ind{2}= '1'; dict_ind{3}= '2'; dict_ind{4} = '3'; dict_ind{5} = '4'; dict_ind{6} = '5'; 
+dec_msg= cell(1, 8);
+curr_index = 
+
+
+len= length(incoming_msg);
+
+for i= 1: len
+    found= 0;
+    
+    for ind= 1:curr_index
+        if strcmp(incoming_msg(i), dict_ind(ind))
+            found= 1;
+            dec_msg{i}= char(dict_sym(ind));
+            if i>1
+                a= dec_msg(i-1);
+                b= dec_msg(i);
+                a= cast(a,'char');
+                b= cast(b,'char');
+                curr_index= curr_index+1;
+                dict_sym{curr_index}= char(strcat(a, b(1)));
+                dict_ind{curr_index}= num2str(curr_index-1);
+            end
+            break;
+        end
+    end
+
+    if ~found
+        a= dec_msg(i-1);
+        a= cast(a,'char');
+        curr_index= curr_index+1;
+        dict_sym{curr_index}= char(strcat(a, a(1)));
+        dict_ind{curr_index}= num2str(curr_index-1);
+        dec_msg{i}= char(dict_sym(curr_index));
+    end
+    
+end
+dict_sym
+dict_ind
+dec_msg
+temp= ' ';
+for i= 1:length(dec_msg)
+    temp= strcat(temp, char(dec_msg(i)));
+end
+disp(temp)
+    
+    
